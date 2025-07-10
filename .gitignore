@@ -1,0 +1,86 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+
+# === Maven / Gradle ===
+
+.gradle/
+!gradle-wrapper.jar
+
+# === IDE Files ===
+.idea/
+
+*.log
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
+
+# === Logs ===
+logs/
+
+
+# === Environment ===
+.env
+application.properties
+application.yml
+application-dev.properties
+application-prod.properties
+
+# === Test Results ===
+test-output/
+surefire-reports/
+jacoco.exec
+
+# === Flyway (optional) ===
+flyway/sql/*~  # temp files
+flyway/sql/*.bak
+
+# === IntelliJ / Eclipse ===
+*.class
+*.swp
+
+.settings/
+
+# === Java ===
+*.jar
+*.war
+*.ear
+
+# === Git ===
+*.orig
+
+# === Spring Boot DevTools ===
+.spring-boot-devtools.properties
+
