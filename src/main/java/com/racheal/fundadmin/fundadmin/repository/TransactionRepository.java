@@ -31,8 +31,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
     @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.fund.fundId = :fundId and t.type = 'FEE' ")
     BigDecimal sumFees(@Param("fundId") UUID fundId);
 
-    @Query("SELECT t FROM Transaction t WHERE t.idempotencyKey = :idempotencyKey ")
-    Optional<Transaction> findByIdempotencyKey(@Param("idempotencyKey") String idempotencyKey);
+//    @Query("SELECT t FROM Transaction t WHERE t.idempotencyKey = :idempotencyKey ")
+//    Optional<Transaction> findByIdempotencyKey(@Param("idempotencyKey") String idempotencyKey);
 }
 
 

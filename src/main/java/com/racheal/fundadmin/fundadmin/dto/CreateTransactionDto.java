@@ -25,17 +25,8 @@ public class CreateTransactionDto {
     @DecimalMin(value = "0.01", message = "Amount must be greater than zero")
     private BigDecimal amount;
 
-    public String getIdempotencyKey() {
-        return idempotencyKey;
-    }
 
-    public void setIdempotencyKey(String idempotencyKey) {
-        this.idempotencyKey = idempotencyKey;
-    }
 
-    @NotBlank(message = "Idempotency key is required")
-    @JsonProperty("idempotency_key")
-    private String idempotencyKey;
 
 
 
@@ -43,11 +34,11 @@ public class CreateTransactionDto {
 
 
 
-    public CreateTransactionDto(TransactionType type, BigDecimal amount, UUID fundId, String idempotencyKey) {
+    public CreateTransactionDto(TransactionType type, BigDecimal amount, UUID fundId) {
         this.type = type;
         this.amount = amount;
         this.fundId = fundId;
-        this.idempotencyKey = idempotencyKey;
+
     }
 
 

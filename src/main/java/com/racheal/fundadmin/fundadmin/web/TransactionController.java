@@ -5,7 +5,11 @@ import com.racheal.fundadmin.fundadmin.dto.FundSummaryDto;
 import com.racheal.fundadmin.fundadmin.dto.TransactionResponseDto;
 import com.racheal.fundadmin.fundadmin.models.Transaction;
 import com.racheal.fundadmin.fundadmin.resources.ApiResponse;
+import com.racheal.fundadmin.fundadmin.resources.exceptions.DuplicateResourceException;
+import com.racheal.fundadmin.fundadmin.service.IdempotencyService;
 import com.racheal.fundadmin.fundadmin.service.TransactionService;
+import com.racheal.fundadmin.fundadmin.utilities.HashUtil;
+import com.sun.jdi.request.DuplicateRequestException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,14 +24,38 @@ import java.util.UUID;
 public class TransactionController {
 
     private final TransactionService transactionService;
+    private final IdempotencyService idempotencyService;
 
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService, IdempotencyService idempotencyService) {
         this.transactionService = transactionService;
+        this.idempotencyService = idempotencyService;
     }
 
 
     @PostMapping("/transactions")
-    public ResponseEntity<ApiResponse<UUID>> createTransaction(@Valid @RequestBody CreateTransactionDto createTransactionDto) {
+    public ResponseEntity<ApiResponse<UUID>> createTransaction(
+            @RequestHeader(value= "Idempotency-Key") String idempotencyKey,
+            @RequestBody @Valid CreateTransactionDto createTransactionDto) {
+
+        String requestHash = HashUtil.hash(createTransactionDto);
+
+        if(idempotencyService.exists(idempotencyKey)) {
+            String existingHash = idempotencyService.get(idempotencyKey);
+
+            if(!existingHash.equals(requestHash)) {
+                throw new DuplicateRequestException("Idempotency key conflict: request data does not match.");
+
+            }
+
+            throw new DuplicateResourceException("Idempotency  conflict:");
+
+//            UUID existingResponse = idempotencyService.getResponse(idempotencyKey);
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>( );
+
+        }
+
+        idempotencyService.save(idempotencyKey, requestHash);
+
         TransactionResponseDto transaction =  transactionService.saveTransaction(createTransactionDto);
         ApiResponse<UUID> response = new ApiResponse<>("Transaction created", transaction.getTransactionId());
         return new ResponseEntity<>(response, HttpStatus.CREATED);

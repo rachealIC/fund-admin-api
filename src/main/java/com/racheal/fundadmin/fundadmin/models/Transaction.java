@@ -37,8 +37,7 @@ public class Transaction {
     @Column(name = "transaction_date", updatable = false)
     private LocalDateTime transactionDate;
 
-    @Column(name = "idempotency_key", nullable = false)
-    private String idempotencyKey;
+
 
     public Transaction() {
 
@@ -90,19 +89,19 @@ public class Transaction {
         this.transactionDate = transactionDate;
     }
 
-    public String getIdempotencyKey() {
-        return idempotencyKey;
-    }
+//    public String getIdempotencyKey() {
+//        return idempotencyKey;
+//    }
+//
+//    public void setIdempotencyKey(String idempotencyKey) {
+//        this.idempotencyKey = idempotencyKey;
+//    }
 
-    public void setIdempotencyKey(String idempotencyKey) {
-        this.idempotencyKey = idempotencyKey;
-    }
-
-    public Transaction(Fund fund, TransactionType type, BigDecimal amount, String idempotencyKey) {
+    public Transaction(Fund fund, TransactionType type, BigDecimal amount) {
         this.fund = fund;
         this.type = type;
         this.amount = amount;
-        this.idempotencyKey = idempotencyKey;
+//        this.idempotencyKey = idempotencyKey;
     }
 
 

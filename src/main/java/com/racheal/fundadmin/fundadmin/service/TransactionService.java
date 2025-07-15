@@ -35,11 +35,11 @@ public class TransactionService {
     public TransactionResponseDto saveTransaction(CreateTransactionDto createTransactionDto) {
         logger.info("Saving transaction: {}", createTransactionDto);
 
-        Optional<Transaction> idempotencyKey = transactionRepository.findByIdempotencyKey(createTransactionDto.getIdempotencyKey());
-        if (idempotencyKey.isPresent()) {
-            logger.info("Duplicate transaction detected. Returning existing transaction.");
-            return TransactionResponseDto.fromEntity(idempotencyKey.get());
-        }
+//        Optional<Transaction> idempotencyKey = transactionRepository.findByIdempotencyKey(createTransactionDto.getIdempotencyKey());
+//        if (idempotencyKey.isPresent()) {
+//            logger.info("Duplicate transaction detected. Returning existing transaction.");
+//            return TransactionResponseDto.fromEntity(idempotencyKey.get());
+//        }
 
         Fund fund = fundRepository.findById(createTransactionDto.getFundId()).orElseThrow(() -> new ResourceNotFoundException("Fund not found"));
         logger.info("Found fund: {}", fund.getFundName());
@@ -64,8 +64,8 @@ public class TransactionService {
         Transaction transaction = new Transaction(
                 fund,
                 createTransactionDto.getType(),
-                createTransactionDto.getAmount(),
-                createTransactionDto.getIdempotencyKey()
+                createTransactionDto.getAmount()
+
         );
 
            Transaction savedTransaction = transactionRepository.save(transaction);
