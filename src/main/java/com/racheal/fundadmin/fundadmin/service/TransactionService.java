@@ -5,6 +5,7 @@ import com.racheal.fundadmin.fundadmin.dto.FundSummaryDto;
 import com.racheal.fundadmin.fundadmin.dto.TransactionResponseDto;
 import com.racheal.fundadmin.fundadmin.models.Fund;
 import com.racheal.fundadmin.fundadmin.models.Transaction;
+import com.racheal.fundadmin.fundadmin.models.TransactionType;
 import com.racheal.fundadmin.fundadmin.repository.FundRepository;
 import com.racheal.fundadmin.fundadmin.repository.TransactionRepository;
 import com.racheal.fundadmin.fundadmin.resources.exceptions.InsufficientBalanceException;
@@ -12,7 +13,10 @@ import com.racheal.fundadmin.fundadmin.resources.exceptions.ResourceNotFoundExce
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -119,4 +123,19 @@ public class TransactionService {
         );
     }
 
+
+    public List<Transaction> getFilteredTransactions(UUID fundId, TransactionType type, LocalDateTime from, LocalDateTime to) {
+        return  transactionRepository.findFilteredTransactions(
+                fundId,
+                type,
+                from != null ? from : LocalDateTime.of(1900, 1, 1, 0, 0),
+                to != null ? to : LocalDateTime.of(2999, 12, 31, 23, 59));
+
+    }
+
+
+    public List<TransactionResponseDto> getAllTransactions(UUID fundId) {
+        List<Transaction> transactions =  transactionRepository.findAllByFundId(fundId);
+        return  transactions.stream().map(TransactionResponseDto::fromEntity).toList();
+    }
 }

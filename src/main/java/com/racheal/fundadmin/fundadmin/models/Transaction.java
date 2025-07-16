@@ -1,5 +1,6 @@
 package com.racheal.fundadmin.fundadmin.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,9 +22,12 @@ public class Transaction {
 
     //It fetches the related table when needed with the Lazy
     //every fund can have multiple transactions
+    //jsonManageReference
+    //jsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fund_id", nullable = false)
     @JsonProperty("fund_id")
+//    @JsonIgnore
     private Fund fund;
 
     @Enumerated(EnumType.STRING)
